@@ -46,6 +46,7 @@ bun src/main.ts text s.txt
 bun src/main.ts text --choice 0 s.txt
 bun src/main.ts text --choice=000 s.txt
 bun src/main.ts check s.txt
+bun src/main.ts check --quiet s.txt
 bun src/main.ts join -- s.txt
 bun src/main.ts --help
 bun src/main.ts --version
@@ -53,7 +54,7 @@ bun src/main.ts --version
 
 - join sorts choices and calls by numeric index and quotes strings with JSON.stringify. Arguments retain their original joined text. Optional usage fields follow on one line in prompt_tokens, completion_tokens, total_tokens order.
 - text prints raw selected content without adding a newline; empty content prints nothing. Default choice is 0.
-- check prints `ok: E events, C choices, T tool calls` and LF. E includes every dispatched event, including [DONE]; T counts calls across all choices. Nouns stay plural.
+- check prints `ok: E events, C choices, T tool calls` and LF. E includes every dispatched event, including [DONE]; T counts calls across all choices. Nouns stay plural. With `--quiet` a valid capture prints nothing and the status is 0; stream problems are reported as before.
 
 Exactly one FILE is required: a path or `-` for stdin. Stdin is read only for `-`. POSIX shell example (macOS/Linux):
 
@@ -66,6 +67,8 @@ Windows Command Prompt (cmd.exe):
 ```bat
 bun src/main.ts check - < s.txt
 ```
+
+Only check accepts `--quiet`; it cannot repeat (`option --quiet given twice`), and `join --quiet` or `text --quiet` is an unknown option.
 
 Only text accepts `--choice N` or `--choice=N`: 1–3 ASCII digits, leading zeros allowed (`007` selects 7). Options may precede or follow FILE; choice cannot repeat. `--` ends options: `bun src/main.ts join -- -x` reads an existing capture named -x. Exact `-` still means stdin.
 

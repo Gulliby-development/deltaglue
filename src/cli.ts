@@ -3,7 +3,7 @@ import { assemble } from "./assemble";
 import { checkReport, joinReport, missingChoiceReport, problemsReport, textReport } from "./report";
 
 export const USAGE =
-  "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check FILE\n";
+  "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check [--quiet] FILE\n";
 export interface Io {
   readFile(name: string): Uint8Array | null; // null when the file cannot be read
   readStdin(): Uint8Array;
@@ -41,11 +41,19 @@ export function run(args: string[], io: Io): number {
     let choiceIndex = 0;
     let hasChoice = false;
     let optionsEnded = false;
+    let quiet = false;
     const files: string[] = [];
     for (let index = 1; index < args.length; index += 1) {
       const argument = args[index] as string;
       if (!optionsEnded && argument === "--") {
         optionsEnded = true;
+        continue;
+      }
+      if (command === "check" && !optionsEnded && argument === "--quiet") {
+        if (quiet) {
+          return fail(io, "option --quiet given twice");
+        }
+        quiet = true;
         continue;
       }
       if (!optionsEnded && argument.startsWith("-") && argument !== "-") {
@@ -115,7 +123,9 @@ export function run(args: string[], io: Io): number {
       return 0;
     }
     if (command === "check") {
-      io.out(checkReport(result));
+      if (!quiet) {
+        io.out(checkReport(result));
+      }
       return 0;
     }
     const report = textReport(result, choiceIndex);

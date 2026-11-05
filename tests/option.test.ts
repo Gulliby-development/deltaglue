@@ -11,7 +11,7 @@ test("optionsHelpAndVersion", () => {
       args: ["--help"],
       want: {
         code: 0,
-        out: "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check FILE\n",
+        out: "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check [--quiet] FILE\n",
         err: "",
       },
     },
@@ -23,7 +23,7 @@ test("optionsHelpAndVersion", () => {
       args: ["--help", "x", "y"],
       want: {
         code: 0,
-        out: "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check FILE\n",
+        out: "usage: deltaglue join FILE\n       deltaglue text [--choice N] FILE\n       deltaglue check [--quiet] FILE\n",
         err: "",
       },
     },
